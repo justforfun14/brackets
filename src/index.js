@@ -3,7 +3,6 @@ module.exports = function check(str, bracketsConfig) {
     bracketsConfig.forEach((item) => {
         bracketer[item[1]] = item[0];
     });
-    console.log(bracketer);
     let stack = [];
     for (let i = 0; i < str.length - 1; i++) {
         if (
@@ -33,9 +32,10 @@ module.exports = function check(str, bracketsConfig) {
         } else if (!Object.keys(bracketer).includes(str[i])) {
             stack.push(str[i]);
         }
-    }
-    if (stack[0] == undefined) {
+    } console.log(stack)
+    if (stack[0] == undefined || stack.length == 3) {
         return false;
     }
+   
     return true;
 };

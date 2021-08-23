@@ -1,24 +1,41 @@
 module.exports = function check(str, bracketsConfig) {
-  let stack = [];
-  let map = {
-      '(': ')',
-      '[': ']',
-      '{': '}'
-  }
-  for (let i = 0; i < str.length; i++) {
-      if (str[i] === '(' || str[i] === '{' ||  str[i] === '[') {
-          stack.push(str[i]);
-      }
-      else {
-          let last = stack.pop();
-          if (str[i] !== map[last]) {
-              return false
-          };
-      }
-  }
-
-  if (stack.length !== 0) {
-      return false
-  };
-  return true;
-}
+    let bracketer = {};
+    bracketsConfig.forEach((item) => {
+        bracketer[item[1]] = item[0];
+    });
+    console.log(bracketer);
+    let stack = [];
+    for (let i = 0; i < str.length - 1; i++) {
+        if (
+            Object.keys(bracketer).includes(str[i]) &&
+            str[i] == bracketer[str[i]]
+        ) {
+            if (stack[stack.length - 1] == str[i]) {
+                stack.pop();
+            } else if (stack[stack.length - 1] != str[i] || !stack.length) {
+                stack.push(str[i]);
+            }
+            continue;
+        }
+        if (!Object.keys(bracketer).includes(str[i])) {
+            stack.push(str[i]);
+        } else if (
+            Object.keys(bracketer).includes(str[i]) &&
+            (!stack.length || stack[stack.length - 1] != bracketer[str[i]])
+        ) {
+            return false;
+        } else if (
+            Object.keys(bracketer).includes(str[i]) &&
+            stack[stack.length - 1] == bracketer[str[i]]
+        ) {
+            stack.pop();
+            continue;
+        } else if (!Object.keys(bracketer).includes(str[i])) {
+            stack.push(str[i]);
+        }
+    }
+    if (stack[0] == undefined) {
+        return false;
+    }
+    return true;
+};
